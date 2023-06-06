@@ -18,4 +18,5 @@ class AppColors {
   static const zeroWhite = Color(0X00FFFFFF);
   static const primaryBg = Color(0xffF9F9F9);
   static const lightAsh = Color(0xffD1D5DB);
+  static const gateWayColor = Color(0xFFEFEFEF);
 }

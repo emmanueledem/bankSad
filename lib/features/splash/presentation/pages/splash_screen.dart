@@ -33,7 +33,10 @@ class _SplashViewState extends State<SplashView> {
                 BusyButton(
                   fontSize: 24,
                   title: 'Get Started',
-                  onpress: () {},
+                  onpress: () {
+                    Navigator.of(context).pushNamedAndRemoveUntil(
+                        RouteName.home, (Route<dynamic> route) => false);
+                  },
                 )
               ],
             ),

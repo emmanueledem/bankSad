@@ -6,4 +6,5 @@ class AppAssets {
   static const String rectangle_2 = 'assets/images/Rectangle_2.png';
   static const String rectangle_3 = 'assets/images/Rectangle_3.png';
   static const String visaLogo = 'assets/images/visa.png';
+  static const String paystackLogo = 'assets/images/paystackLogo.png';
 }

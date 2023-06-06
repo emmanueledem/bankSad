@@ -1,5 +1,6 @@
 import 'package:banksync/core/core.dart';
 import 'package:banksync/features/features.dart';
+import 'package:banksync/features/home/home.dart';
 import 'package:flutter/material.dart';
 
 Route<dynamic> generateRoute(RouteSettings settings) {
@@ -9,7 +10,11 @@ Route<dynamic> generateRoute(RouteSettings settings) {
         routeName: settings.name!,
         viewToShow: const SplashView(),
       );
-
+    case RouteName.home:
+      return _getPageRoute(
+        routeName: settings.name!,
+        viewToShow: const Home(),
+      );
     default:
       return MaterialPageRoute<dynamic>(
         builder: (_) => Scaffold(

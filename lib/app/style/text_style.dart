@@ -114,7 +114,7 @@ class TextRegular extends AppTextBase {
     Key? key,
     TextStyle? style,
     double fontSize = 14,
-    FontWeight fontWeight = FontWeight.w500,
+    FontWeight fontWeight = FontWeight.w400,
     Color? color,
     TextAlign textAlign = TextAlign.left,
     TextOverflow overflow = TextOverflow.visible,
@@ -154,7 +154,7 @@ class TextBody extends TextRegular {
           style: TextStyle(
             fontSize: fontSize ?? 14,
             color: color ?? AppColors.black,
-            fontWeight: FontWeight.w500,
+            fontWeight: FontWeight.w400,
             height: height,
           ).merge(style),
           textAlign: textAlign,
