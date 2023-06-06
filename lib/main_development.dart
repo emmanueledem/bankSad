@@ -1,4 +1,5 @@
 import 'package:banksync/bootstrap.dart';
+import 'package:banksync/core/dependency_injection.dart/injection.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 
@@ -7,8 +8,7 @@ import 'app/app.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // await dotenv.load(fileName: '.env.development');
-  // await configureDependencies();
-
+  configureDependencies();
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitDown,
     DeviceOrientation.portraitUp,

@@ -19,6 +19,7 @@ class _MyAppState extends State<MyApp> {
     //     builder: (context) {
     return const MaterialApp(
       onGenerateRoute: generateRoute,
+      debugShowCheckedModeBanner: false,
       initialRoute: RouteName.splash,
       //     );
       //   },
