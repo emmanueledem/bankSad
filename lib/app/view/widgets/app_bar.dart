@@ -1,24 +1,34 @@
-import 'package:banksync/app/app.dart';
-import 'package:banksync/core/core.dart';
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 
-class SecondaryAppbar extends StatelessWidget implements PreferredSizeWidget {
-  const SecondaryAppbar({Key? key}) : super(key: key);
+import 'package:banksync/app/app.dart';
+import 'package:banksync/core/core.dart';
 
+class SecondaryAppbar extends StatelessWidget implements PreferredSizeWidget {
+  const SecondaryAppbar({
+    Key? key,
+    required this.title,
+  }) : super(key: key);
+  final String title;
   @override
   Widget build(BuildContext context) {
     return AppBar(
       title: HeaderText(
-        'User Details',
+        title,
         fontWeight: FontWeight.w400,
         fontFamily: AppFonts.rambla,
         fontSize: 24,
       ),
-      leading: const Padding(
-        padding: EdgeInsets.only(left: 25),
-        child: Icon(
-          Icons.arrow_back,
-          color: AppColors.black,
+      leading: Padding(
+        padding: const EdgeInsets.only(left: 25),
+        child: GestureDetector(
+          onTap: () {
+            Navigator.pop(context);
+          },
+          child: const Icon(
+            Icons.arrow_back,
+            color: AppColors.black,
+          ),
         ),
       ),
       automaticallyImplyLeading: false,
