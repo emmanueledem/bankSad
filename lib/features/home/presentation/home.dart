@@ -16,17 +16,7 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.white,
-      appBar: AppBar(
-        backgroundColor: AppColors.white,
-        centerTitle: false,
-        elevation: 0,
-        title: HeaderText(
-          'Banksad',
-          fontWeight: FontWeight.w400,
-          fontFamily: AppFonts.rambla,
-          fontSize: 24,
-        ),
-      ),
+      appBar: const PrimaryAppbar(),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 38),
@@ -48,7 +38,9 @@ class _HomeState extends State<Home> {
               ),
               const Gap(20),
               GatewaysContainer(
-                onpress: () {},
+                onpress: () {
+                  Navigator.pushNamed(context, RouteName.paystackUserDetails);
+                },
                 digit: '\$19',
                 logoName: AppAssets.paystackLogo,
                 name: 'Paystack',

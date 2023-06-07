@@ -17,7 +17,7 @@ class GatewaysContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {},
+      onTap: onpress,
       child: Padding(
         padding: const EdgeInsets.only(bottom: 20),
         child: Container(
