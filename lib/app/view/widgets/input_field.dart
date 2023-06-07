@@ -1,6 +1,7 @@
 import 'package:banksync/core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:pattern_formatter/pattern_formatter.dart';
 
 class InputField extends StatefulWidget {
   const InputField({
@@ -93,6 +94,10 @@ class _InputFieldState extends State<InputField> {
                     focusNode: widget.fieldFocusNode,
                     textInputAction: widget.textInputAction,
                     onChanged: widget.onChanged,
+                    inputFormatters:
+                        widget.textInputType! == TextInputType.number
+                            ? [ThousandsFormatter()]
+                            : [],
                     style: const TextStyle(
                       fontSize: 16,
                       color: AppColors.inputBlack,
@@ -106,8 +111,8 @@ class _InputFieldState extends State<InputField> {
                       border: InputBorder.none,
 
                       hintStyle: const TextStyle(
-                        fontSize: 12,
-                        color: AppColors.hintText,
+                        fontSize: 16,
+                        color: AppColors.black,
                         fontWeight: FontWeight.w400,
                         fontFamily: AppFonts.rambla,
                       ),

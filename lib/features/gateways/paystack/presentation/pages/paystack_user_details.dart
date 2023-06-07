@@ -1,8 +1,10 @@
 import 'dart:async';
 
 import 'package:banksync/app/app.dart';
-import 'package:banksync/core/core.dart';
+import 'package:banksync/app/view/widgets/input_field.dart';
+import 'package:banksync/core/utils/utils.dart';
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 
 class PaystackUserDetails extends StatefulWidget {
   const PaystackUserDetails({super.key});
@@ -29,31 +31,154 @@ class _PaystackUserDetailsState extends State<PaystackUserDetails> {
   @override
   void initState() {
     super.initState();
+
     _userNameStreamConroller = StreamController<String>.broadcast();
     _emailStreamConroller = StreamController<String>.broadcast();
     _amountStreamConroller = StreamController<String>.broadcast();
 
+    void validateInputs() {
+      var canSumit = true;
+
+      final userNameError = CustomFormValidation.errorMessageUserName(
+        _userNameController.text.trim(),
+        'Username is required',
+      );
+      final emailError = CustomFormValidation.errorEmailMessage(
+        _emailController.text.trim(),
+        'Email is required',
+      );
+      final amountError = CustomFormValidation.errorMessagePassword(
+        _amountController.text.trim(),
+        'Phone is required',
+      );
+
+      if (userNameError != '' || emailError != '' || amountError != '') {
+        canSumit = false;
+      }
+
+      _canSubmit.value = canSumit;
+    }
+
     _userNameController.addListener(() {
       _userNameStreamConroller.sink.add(_userNameController.text.trim());
+      validateInputs();
     });
 
     _emailController.addListener(() {
       _emailStreamConroller.sink.add(_emailController.text.trim());
+      validateInputs();
     });
 
     _amountController.addListener(() {
       _amountStreamConroller.sink.add(_amountController.text.trim());
+      validateInputs();
     });
   }
 
   @override
+  void dispose() {
+    super.dispose();
+    _userNameController.clear();
+    _emailController.clear();
+    _amountController.clear();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      backgroundColor: AppColors.white,
-      appBar: SecondaryAppbar(),
+    return Scaffold(
+      backgroundColor: const Color.fromRGBO(255, 255, 255, 1),
+      appBar: const SecondaryAppbar(title: 'Paystack Payment'),
       body: SafeArea(
-        child: Column(
-          children: [],
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 34,
+            ),
+            child: Column(
+              children: [
+                const Gap(24.53),
+                StreamBuilder<String>(
+                  stream: _userNameStreamConroller.stream,
+                  builder: (context, snapshot) {
+                    return InputField(
+                      controller: _userNameController,
+                      placeholder: 'Username',
+                      validationMessage:
+                          CustomFormValidation.errorMessageUserName(
+                        snapshot.data,
+                        'Username is required*',
+                      ),
+                      validationColor: CustomFormValidation.getColor(
+                        snapshot.data,
+                        _userNameFocusNode,
+                        CustomFormValidation.errorMessageUserName(
+                          snapshot.data,
+                          'Username is required*',
+                        ),
+                      ),
+                    );
+                  },
+                ),
+                const Gap(14),
+                StreamBuilder<String>(
+                  stream: _emailStreamConroller.stream,
+                  builder: (context, snapshot) {
+                    return InputField(
+                      controller: _emailController,
+                      placeholder: 'Email',
+                      validationMessage: CustomFormValidation.errorEmailMessage(
+                        snapshot.data,
+                        'Email is required*',
+                      ),
+                      validationColor: CustomFormValidation.getColor(
+                        snapshot.data,
+                        _emailFocusNode,
+                        CustomFormValidation.errorEmailMessage(
+                          snapshot.data,
+                          'Email is required*',
+                        ),
+                      ),
+                    );
+                  },
+                ),
+                const Gap(14),
+                StreamBuilder<String>(
+                  stream: _amountStreamConroller.stream,
+                  builder: (context, snapshot) {
+                    return InputField(
+                      controller: _amountController,
+                      textInputType: TextInputType.number,
+                      placeholder: 'Amount',
+                      validationMessage: CustomFormValidation.errorMessage(
+                        snapshot.data,
+                        'Amount is required*',
+                      ),
+                      validationColor: CustomFormValidation.getColor(
+                        snapshot.data,
+                        _amountFocusNode,
+                        CustomFormValidation.errorMessage(
+                          snapshot.data,
+                          'Amount is required*',
+                        ),
+                      ),
+                    );
+                  },
+                ),
+                const Gap(30),
+                const Gap(33),
+                ValueListenableBuilder(
+                  valueListenable: _canSubmit,
+                  builder: (context, canSubmit, child) {
+                    return BusyButton(
+                        title: 'PAY NOW',
+                        deactivate: !canSubmit,
+                        onpress: () {});
+                  },
+                ),
+                const Gap(33),
+              ],
+            ),
+          ),
         ),
       ),
     );
