@@ -20,12 +20,11 @@ class PayWithPayStackImpl implements PaystackPaymentRepository {
       required String amount,
       required BuildContext context}) async {
     try {
-      final result = paystackPaymentRemoteDataSource.makePayStackPayment(
+      final result = await paystackPaymentRemoteDataSource.makePayStackPayment(
           username: username, email: email, amount: amount, context: context);
-      return Right(result.toString());
+      return Right(result);
     } catch (e) {
-      Logger().e(e);
-      if (e is NoInternetException) {
+      if (e is NoInternetFailure) {
         return Left(NoInternetFailure());
       }
 
