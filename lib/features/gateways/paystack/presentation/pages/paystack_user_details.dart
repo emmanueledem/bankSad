@@ -3,8 +3,12 @@ import 'dart:async';
 import 'package:banksync/app/app.dart';
 import 'package:banksync/app/view/widgets/input_field.dart';
 import 'package:banksync/core/utils/utils.dart';
+import 'package:banksync/features/gateways/paystack/presentation/bloc/paystack_payment_bloc.dart';
+import 'package:banksync/features/gateways/paystack/presentation/bloc/paystack_payment_state.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
+import 'package:logger/logger.dart';
 
 class PaystackUserDetails extends StatefulWidget {
   const PaystackUserDetails({super.key});
@@ -88,98 +92,129 @@ class _PaystackUserDetailsState extends State<PaystackUserDetails> {
     return Scaffold(
       backgroundColor: const Color.fromRGBO(255, 255, 255, 1),
       appBar: const SecondaryAppbar(title: 'Paystack Payment'),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 34,
+      body: BlocConsumer<PaystackPaymentBloc, PaystackPaymentState>(
+        listener: (context, state) {
+          state.maybeWhen(
+            orElse: () {},
+            error: (message) {
+              Logger().d(message);
+            },
+            success: (message) {
+              Logger().d(message);
+            },
+          );
+        },
+        builder: (context, state) {
+          return SafeArea(
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 34,
+                ),
+                child: Column(
+                  children: [
+                    const Gap(24.53),
+                    StreamBuilder<String>(
+                      stream: _userNameStreamConroller.stream,
+                      builder: (context, snapshot) {
+                        return InputField(
+                          controller: _userNameController,
+                          placeholder: 'Username',
+                          validationMessage:
+                              CustomFormValidation.errorMessageUserName(
+                            snapshot.data,
+                            'Username is required*',
+                          ),
+                          validationColor: CustomFormValidation.getColor(
+                            snapshot.data,
+                            _userNameFocusNode,
+                            CustomFormValidation.errorMessageUserName(
+                              snapshot.data,
+                              'Username is required*',
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                    const Gap(14),
+                    StreamBuilder<String>(
+                      stream: _emailStreamConroller.stream,
+                      builder: (context, snapshot) {
+                        return InputField(
+                          controller: _emailController,
+                          placeholder: 'Email',
+                          validationMessage:
+                              CustomFormValidation.errorEmailMessage(
+                            snapshot.data,
+                            'Email is required*',
+                          ),
+                          validationColor: CustomFormValidation.getColor(
+                            snapshot.data,
+                            _emailFocusNode,
+                            CustomFormValidation.errorEmailMessage(
+                              snapshot.data,
+                              'Email is required*',
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                    const Gap(14),
+                    StreamBuilder<String>(
+                      stream: _amountStreamConroller.stream,
+                      builder: (context, snapshot) {
+                        return InputField(
+                          controller: _amountController,
+                          textInputType: TextInputType.number,
+                          placeholder: 'Amount',
+                          validationMessage: CustomFormValidation.errorMessage(
+                            snapshot.data,
+                            'Amount is required*',
+                          ),
+                          validationColor: CustomFormValidation.getColor(
+                            snapshot.data,
+                            _amountFocusNode,
+                            CustomFormValidation.errorMessage(
+                              snapshot.data,
+                              'Amount is required*',
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                    const Gap(33),
+                    ValueListenableBuilder(
+                      valueListenable: _canSubmit,
+                      builder: (context, canSubmit, child) {
+                        return BusyButton(
+                            title: 'PAY NOW',
+                            deactivate: canSubmit == false ||
+                                state.maybeWhen(
+                                  orElse: () => false,
+                                  loading: () => true,
+                                ),
+                            loading: state.maybeWhen(
+                              orElse: () => false,
+                              loading: () => true,
+                            ),
+                            onpress: () async {
+                              await context
+                                  .read<PaystackPaymentBloc>()
+                                  .payNowWithPaystack(
+                                      context: context,
+                                      username: _userNameController.text.trim(),
+                                      email: _emailController.text.trim(),
+                                      amount: _amountController.text.trim());
+                            });
+                      },
+                    ),
+                    const Gap(33),
+                  ],
+                ),
+              ),
             ),
-            child: Column(
-              children: [
-                const Gap(24.53),
-                StreamBuilder<String>(
-                  stream: _userNameStreamConroller.stream,
-                  builder: (context, snapshot) {
-                    return InputField(
-                      controller: _userNameController,
-                      placeholder: 'Username',
-                      validationMessage:
-                          CustomFormValidation.errorMessageUserName(
-                        snapshot.data,
-                        'Username is required*',
-                      ),
-                      validationColor: CustomFormValidation.getColor(
-                        snapshot.data,
-                        _userNameFocusNode,
-                        CustomFormValidation.errorMessageUserName(
-                          snapshot.data,
-                          'Username is required*',
-                        ),
-                      ),
-                    );
-                  },
-                ),
-                const Gap(14),
-                StreamBuilder<String>(
-                  stream: _emailStreamConroller.stream,
-                  builder: (context, snapshot) {
-                    return InputField(
-                      controller: _emailController,
-                      placeholder: 'Email',
-                      validationMessage: CustomFormValidation.errorEmailMessage(
-                        snapshot.data,
-                        'Email is required*',
-                      ),
-                      validationColor: CustomFormValidation.getColor(
-                        snapshot.data,
-                        _emailFocusNode,
-                        CustomFormValidation.errorEmailMessage(
-                          snapshot.data,
-                          'Email is required*',
-                        ),
-                      ),
-                    );
-                  },
-                ),
-                const Gap(14),
-                StreamBuilder<String>(
-                  stream: _amountStreamConroller.stream,
-                  builder: (context, snapshot) {
-                    return InputField(
-                      controller: _amountController,
-                      textInputType: TextInputType.number,
-                      placeholder: 'Amount',
-                      validationMessage: CustomFormValidation.errorMessage(
-                        snapshot.data,
-                        'Amount is required*',
-                      ),
-                      validationColor: CustomFormValidation.getColor(
-                        snapshot.data,
-                        _amountFocusNode,
-                        CustomFormValidation.errorMessage(
-                          snapshot.data,
-                          'Amount is required*',
-                        ),
-                      ),
-                    );
-                  },
-                ),
-                const Gap(30),
-                const Gap(33),
-                ValueListenableBuilder(
-                  valueListenable: _canSubmit,
-                  builder: (context, canSubmit, child) {
-                    return BusyButton(
-                        title: 'PAY NOW',
-                        deactivate: !canSubmit,
-                        onpress: () {});
-                  },
-                ),
-                const Gap(33),
-              ],
-            ),
-          ),
-        ),
+          );
+        },
       ),
     );
   }
