@@ -31,7 +31,7 @@ class PaystackPaymentUsecaseParams extends Equatable {
 
   final String userName;
   final String email;
-  final String amount;
+  final dynamic amount;
   final BuildContext context;
 
   @override

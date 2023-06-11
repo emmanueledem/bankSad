@@ -1,5 +1,5 @@
 class StringFormat {
   formatAmount(value) {
-    return value.replaceAll(RegExp('[^A-Za-z0-9]'), '');
+    return int.parse(value.replaceAll(',', ''));
   }
 }

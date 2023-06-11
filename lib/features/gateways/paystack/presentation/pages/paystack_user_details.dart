@@ -2,11 +2,14 @@ import 'dart:async';
 
 import 'package:banksync/app/app.dart';
 import 'package:banksync/app/view/widgets/input_field.dart';
+import 'package:banksync/core/constants/env.dart';
 import 'package:banksync/core/utils/utils.dart';
 import 'package:banksync/features/gateways/paystack/presentation/bloc/paystack_payment_bloc.dart';
 import 'package:banksync/features/gateways/paystack/presentation/bloc/paystack_payment_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_paystack/flutter_paystack.dart';
 import 'package:gap/gap.dart';
 import 'package:logger/logger.dart';
 
@@ -31,10 +34,14 @@ class _PaystackUserDetailsState extends State<PaystackUserDetails> {
   late StreamController<String> _amountStreamConroller;
 
   final ValueNotifier<bool> _canSubmit = ValueNotifier(false);
+  final plugin = PaystackPlugin();
 
   @override
   void initState() {
     super.initState();
+
+    plugin.initialize(
+        publicKey: dotenv.env[EnvConstants.testSecretpublicKey].toString());
 
     _userNameStreamConroller = StreamController<String>.broadcast();
     _emailStreamConroller = StreamController<String>.broadcast();
@@ -99,9 +106,7 @@ class _PaystackUserDetailsState extends State<PaystackUserDetails> {
             error: (message) {
               Logger().d(message);
             },
-            success: (message) {
-              Logger().d(message);
-            },
+            success: (message) {},
           );
         },
         builder: (context, state) {

@@ -14,7 +14,7 @@ abstract class PaystackPaymentRemoteDataSource {
   Future<String> makePayStackPayment(
       {required String username,
       required String email,
-      required String amount,
+      required dynamic amount,
       required BuildContext context});
 }
 
@@ -32,15 +32,13 @@ class PaystackPaymentRemoteDataSourceImpl
   Future<String> makePayStackPayment(
       {required String username,
       required String email,
-      required String amount,
+      required dynamic amount,
       required BuildContext context}) async {
     if (await networkInfo.isConnected) {
-      String finalAmount = StringFormat().formatAmount(amount);
-
-      initializePlugin().then((value) async {
+      dynamic finalAmount = StringFormat().formatAmount(amount);
+      await initializePlugin().then((value) async {
         Charge charge = Charge()
-          ..amount = 1000 * 100
-          // ..amount = '$amount+.00' * 100 as int
+          ..amount = finalAmount * 100
           ..email = email
           ..reference = _getReference()
           ..card = getCardUi();
@@ -52,18 +50,13 @@ class PaystackPaymentRemoteDataSourceImpl
           logo: Image.asset(AppAssets.banksadLogo),
         );
 
-        if (response == true) {
+        if (response.status = true) {
           Logger().d('Transaction successful');
         } else {
           Logger().d('Transaction failed');
         }
       });
-      // Logger().d(username);
-      // Logger().d(email);
-      // Logger().d(amount);
-      // String fff = StringFormat().formatAmount(amount);
-      // Logger().d('$fff.00');
-      return 'paid';
+      return 'Transaction successfull';
     } else {
       throw NoInternetException();
     }
