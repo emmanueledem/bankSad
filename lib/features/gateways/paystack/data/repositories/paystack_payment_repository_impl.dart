@@ -1,4 +1,3 @@
-import 'package:banksync/core/constants/errors/error.dart';
 import 'package:banksync/core/constants/errors/failure.dart';
 import 'package:banksync/features/gateways/paystack/data/data/datasources.dart';
 import 'package:banksync/features/gateways/paystack/domain/repository/respositories.dart';
@@ -17,13 +16,14 @@ class PayWithPayStackImpl implements PaystackPaymentRepository {
   Future<Either<Failure, String>> paystackPayment(
       {required String username,
       required String email,
-      required String amount,
+      required dynamic amount,
       required BuildContext context}) async {
     try {
       final result = await paystackPaymentRemoteDataSource.makePayStackPayment(
           username: username, email: email, amount: amount, context: context);
       return Right(result);
     } catch (e) {
+      Logger().d(e.toString());
       if (e is NoInternetFailure) {
         return Left(NoInternetFailure());
       }

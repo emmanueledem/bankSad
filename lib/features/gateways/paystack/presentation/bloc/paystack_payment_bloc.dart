@@ -15,7 +15,7 @@ class PaystackPaymentBloc extends Cubit<PaystackPaymentState> {
     required BuildContext context,
     required String username,
     required String email,
-    required String amount,
+    required dynamic amount,
   }) async {
     emit(const PaystackPaymentState.loading());
     final result = await paystackPaymentUsecase(PaystackPaymentUsecaseParams(

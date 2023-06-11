@@ -6,6 +6,6 @@ abstract class PaystackPaymentRepository {
   Future<Either<Failure, String>> paystackPayment(
       {required String username,
       required String email,
-      required String amount,
+      required dynamic amount,
       required BuildContext context});
 }
