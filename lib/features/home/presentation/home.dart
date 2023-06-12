@@ -45,6 +45,14 @@ class _HomeState extends State<Home> {
                 logoName: AppAssets.paystackLogo,
                 name: 'Paystack',
               ),
+              GatewaysContainer(
+                onpress: () {
+                  Navigator.pushNamed(context, RouteName.paystackUserDetails);
+                },
+                digit: '\$19',
+                logoName: AppAssets.flutterWaveLogo,
+                name: 'Flutter wave',
+              ),
             ],
           ),
         ),
