@@ -106,7 +106,9 @@ class _PaystackUserDetailsState extends State<PaystackUserDetails> {
             error: (message) {
               Logger().d(message);
             },
-            success: (message) {},
+            success: (message) {
+              Navigator.pop(context);
+            },
           );
         },
         builder: (context, state) {

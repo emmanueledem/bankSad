@@ -1,6 +1,5 @@
 import 'package:banksync/core/core.dart';
 import 'package:banksync/features/features.dart';
-import 'package:banksync/features/gateways/paystack/presentation/pages/paystack_user_details.dart';
 import 'package:banksync/features/home/home.dart';
 import 'package:flutter/material.dart';
 

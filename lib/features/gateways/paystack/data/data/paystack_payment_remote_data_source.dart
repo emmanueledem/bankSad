@@ -8,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_paystack/flutter_paystack.dart';
 import 'package:injectable/injectable.dart';
-import 'package:logger/logger.dart';
 
 abstract class PaystackPaymentRemoteDataSource {
   Future<String> makePayStackPayment(
@@ -51,15 +50,15 @@ class PaystackPaymentRemoteDataSourceImpl
         );
 
         if (response.status = true) {
-          Logger().d('Transaction successful');
+          return 'Transaction successfull';
         } else {
-          Logger().d('Transaction failed');
+          return 'Transaction failed';
         }
       });
-      return 'Transaction successfull';
     } else {
       throw NoInternetException();
     }
+    return '';
   }
 
   // initialize plugin

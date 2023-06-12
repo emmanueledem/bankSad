@@ -9,4 +9,5 @@ class AppAssets {
   static const String paystackLogo = 'assets/images/paystackLogo.png';
   static const String hideEye = 'assets/fonts/hide_eye.svg';
   static const String showEye = 'assets/fonts/show_eye.svg';
+  static const String flutterWaveLogo = 'assets/images/Flutterwave_Logo.png';
 }
