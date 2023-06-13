@@ -209,6 +209,7 @@ class _PaystackUserDetailsState extends State<PaystackUserDetails> {
                                   .read<PaystackPaymentBloc>()
                                   .payNowWithPaystack(
                                       context: context,
+                                      paystackinit: plugin,
                                       username: _userNameController.text.trim(),
                                       email: _emailController.text.trim(),
                                       amount: _amountController.text.trim());
