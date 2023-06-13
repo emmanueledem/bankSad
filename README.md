@@ -1,4 +1,4 @@
-# banksync
+# bankSad
 
 A new Flutter project.
 
