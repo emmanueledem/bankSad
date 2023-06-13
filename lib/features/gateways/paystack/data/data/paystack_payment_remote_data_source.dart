@@ -1,17 +1,16 @@
 import 'dart:io';
-import 'package:banksync/core/constants/env.dart';
 import 'package:banksync/core/constants/errors/error.dart';
 import 'package:banksync/core/core.dart';
 import 'package:banksync/core/network/network_info.dart';
 import 'package:banksync/core/utils/utils.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_paystack/flutter_paystack.dart';
 import 'package:injectable/injectable.dart';
 
 abstract class PaystackPaymentRemoteDataSource {
   Future<String> makePayStackPayment(
       {required String username,
+      required PaystackPlugin paystackinit,
       required String email,
       required dynamic amount,
       required BuildContext context});
@@ -31,6 +30,7 @@ class PaystackPaymentRemoteDataSourceImpl
   Future<String> makePayStackPayment(
       {required String username,
       required String email,
+      required PaystackPlugin paystackinit,
       required dynamic amount,
       required BuildContext context}) async {
     if (await networkInfo.isConnected) {
@@ -41,7 +41,7 @@ class PaystackPaymentRemoteDataSourceImpl
           ..email = email
           ..reference = _getReference()
           ..card = getCardUi();
-        CheckoutResponse response = await paystack.checkout(
+        CheckoutResponse response = await paystackinit.checkout(
           context,
           charge: charge,
           method: CheckoutMethod.card,
@@ -63,8 +63,8 @@ class PaystackPaymentRemoteDataSourceImpl
 
   // initialize plugin
   Future initializePlugin() async {
-    paystack.initialize(
-        publicKey: dotenv.env[EnvConstants.testSecretpublicKey].toString());
+    // paystack.initialize(
+    //     publicKey: dotenv.env[EnvConstants.testSecretpublicKey].toString());
   }
 
 // get reference

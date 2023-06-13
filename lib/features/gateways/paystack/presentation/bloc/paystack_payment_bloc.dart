@@ -2,6 +2,7 @@
 import 'package:banksync/features/gateways/paystack/presentation/bloc/paystack_payment_state.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_paystack/flutter_paystack.dart';
 import '../../domain/domain.dart';
 
 class PaystackPaymentBloc extends Cubit<PaystackPaymentState> {
@@ -13,13 +14,18 @@ class PaystackPaymentBloc extends Cubit<PaystackPaymentState> {
 
   Future<void> payNowWithPaystack({
     required BuildContext context,
+    required PaystackPlugin paystackinit,
     required String username,
     required String email,
     required dynamic amount,
   }) async {
     emit(const PaystackPaymentState.loading());
     final result = await paystackPaymentUsecase(PaystackPaymentUsecaseParams(
-        userName: username, email: email, amount: amount, context: context));
+        userName: username,
+        email: email,
+        paystackinit: paystackinit,
+        amount: amount,
+        context: context));
     emit(
       await result.fold(
         (failure) => PaystackPaymentState.error(
